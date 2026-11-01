@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>¿Quieres cenar conmigo?</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      color: #222;
+      margin: 0;
+      padding: 25px 12px;
+    }
+    .caja {
+      max-width: 480px;
+      margin: 35px auto;
+      padding: 25px;
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+    }
+    h1 { text-align: center; font-size: 27px; }
+    p { line-height: 1.5; }
+    .centro { text-align: center; }
+    .pasos { text-align: center; color: #888; font-size: 13px; margin-bottom: 25px; }
+    .pagina { display: none; }
+    .pagina.activa { display: block; }
+    label.titulo { display: block; margin: 18px 0 7px; font-weight: bold; }
+    input[type="date"], input[type="time"], textarea {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 11px;
+      border: 1px solid #bbb;
+      border-radius: 4px;
+      font: inherit;
+      background: white;
+    }
+    textarea { min-height: 95px; resize: vertical; }
+    .opciones { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
+    .opcion input { display: none; }
+    .opcion span {
+      display: block;
+      padding: 15px 8px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      text-align: center;
+      cursor: pointer;
+      background: #fafafa;
+    }
+    .opcion input:checked + span {
+      background: #ffe5eb;
+      border: 2px solid #e58a9e;
+      padding: 14px 7px;
+    }
+    button {
+      padding: 11px 17px;
+      border: 1px solid #aaa;
+      border-radius: 5px;
+      background: #eee;
+      font-size: 15px;
+      cursor: pointer;
+    }
+    button:hover { background: #e2e2e2; }
+    .principal { background: #f5cbd5; border-color: #df9eae; }
+    .principal:hover { background: #efb9c7; }
+    .botones { display: flex; justify-content: space-between; gap: 10px; margin-top: 22px; }
+    .botones button:only-child { margin-left: auto; }
+    .error { color: #b00020; font-size: 14px; min-height: 18px; }
+    .resumen { background: #fafafa; border: 1px solid #ddd; padding: 15px; border-radius: 5px; line-height: 1.8; }
+    .nota { color: #777; font-size: 12px; text-align: center; margin-top: 20px; }
+    @media (max-width: 350px) { .opciones { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <main class="caja">
+    <div class="pasos" id="pasos">PASO 1 DE 3</div>
+
+    <section class="pagina activa" id="pagina1">
+      <h1>¿Quieres cenar conmigo? ❤️</h1>
+      <p class="centro">Venga, que puede estar bien jajaja.</p>
+
+      <label class="titulo" for="fecha">Elige el día:</label>
+      <input type="date" id="fecha" required>
+
+      <label class="titulo" for="hora">¿Y la hora?</label>
+      <input type="time" id="hora" required>
+
+      <p class="error" id="error1"></p>
+      <div class="botones">
+        <button class="principal" id="siguiente1">Continuar</button>
+      </div>
+    </section>
+
+    <section class="pagina" id="pagina2">
+      <h1>¿Qué cenamos?</h1>
+      <p>Elige una opción de estas:</p>
+
+      <div class="opciones">
+        <label class="opcion"><input type="radio" name="comida" value="Hamburguesa"><span>🍔 HAMBURGUESA</span></label>
+        <label class="opcion"><input type="radio" name="comida" value="Sushi"><span>🍣 SUSHI</span></label>
+        <label class="opcion"><input type="radio" name="comida" value="Pizza"><span>🍕 PIZZA</span></label>
+        <label class="opcion"><input type="radio" name="comida" value="Mexicana"><span>🌮 MEXICANA</span></label>
+        <label class="opcion"><input type="radio" name="comida" value="Italiana"><span>🍝 ITALIANA</span></label>
+        <label class="opcion"><input type="radio" name="comida" value="Lo que tú quieras"><span>🤷 LO QUE SEA</span></label>
+      </div>
+
+      <p class="error" id="error2"></p>
+      <div class="botones">
+        <button id="atras2">Atrás</button>
+        <button class="principal" id="siguiente2">Continuar</button>
+      </div>
+    </section>
+
+    <section class="pagina" id="pagina3">
+      <h1>Última cosa...</h1>
+      <p>¿Quieres dejar algún comentario? (opcional)</p>
+      <textarea id="comentario" placeholder="Lo que quieras decirme..."></textarea>
+      <p class="error" id="error3"></p>
+      <div class="botones">
+        <button id="atras3">Atrás</button>
+        <button class="principal" id="finalizar">Finalizar ❤️</button>
+      </div>
+    </section>
+
+    <section class="pagina" id="paginaFinal">
+      <h1>¡Perfecto! ❤️</h1>
+      <p class="centro">Respuesta enviada. ¡Ya estoy avisado! jajaja</p>
+      <div class="resumen" id="resumen"></div>
+      <p class="nota">Gracias por contestar :)</p>
+    </section>
+  </main>
+
+  <script>
+    const fecha = document.getElementById("fecha");
+    const hoy = new Date();
+    const fechaLocal = new Date(hoy.getTime() - hoy.getTimezoneOffset() * 60000)
+      .toISOString().slice(0, 10);
+    fecha.min = fechaLocal;
+
+    function mostrar(numero) {
+      document.querySelectorAll(".pagina").forEach(p => p.classList.remove("activa"));
+      document.getElementById(numero === 4 ? "paginaFinal" : "pagina" + numero)
+        .classList.add("activa");
+      document.getElementById("pasos").textContent =
+        numero === 4 ? "TERMINADO" : "PASO " + numero + " DE 3";
+      document.getElementById("pasos").style.display = numero === 4 ? "none" : "block";
+    }
+
+    document.getElementById("siguiente1").onclick = () => {
+      const hora = document.getElementById("hora").value;
+      const error = document.getElementById("error1");
+      if (!fecha.value || !hora) {
+        error.textContent = "Tienes que elegir fecha y hora.";
+        return;
+      }
+      if (fecha.value < fechaLocal) {
+        error.textContent = "Esa fecha ya ha pasado.";
+        return;
+      }
+      error.textContent = "";
+      mostrar(2);
+    };
+
+    document.getElementById("siguiente2").onclick = () => {
+      if (!document.querySelector('input[name="comida"]:checked')) {
+        document.getElementById("error2").textContent = "Elige algo anda 😅";
+        return;
+      }
+      document.getElementById("error2").textContent = "";
+      mostrar(3);
+    };
+
+    document.getElementById("atras2").onclick = () => mostrar(1);
+    document.getElementById("atras3").onclick = () => mostrar(2);
+
+    document.getElementById("finalizar").onclick = async () => {
+      const boton = document.getElementById("finalizar");
+      const comida = document.querySelector('input[name="comida"]:checked').value;
+      const comentario = document.getElementById("comentario").value.trim();
+      const partes = fecha.value.split("-");
+      const fechaBonita = new Date(+partes[0], +partes[1] - 1, +partes[2])
+        .toLocaleDateString("es-ES", { day: "numeric", month: "long", year: "numeric" });
+      const hora = document.getElementById("hora").value;
+
+      boton.disabled = true;
+      boton.textContent = "Enviando...";
+
+      const datos = new FormData();
+      datos.append("Fecha", fechaBonita);
+      datos.append("Hora", hora);
+      datos.append("Cena", comida);
+      datos.append("Comentario", comentario || "Sin comentario");
+      datos.append("_subject", "¡Han respondido a la invitación para cenar! ❤️");
+      datos.append("_template", "table");
+      datos.append("_captcha", "false");
+
+      try {
+        const respuesta = await fetch("https://formsubmit.co/ajax/davidmaji04@gmail.com", {
+          method: "POST",
+          headers: { "Accept": "application/json" },
+          body: datos
+        });
+        const resultado = await respuesta.json();
+        if (!respuesta.ok || resultado.success === "false") {
+          throw new Error("No se ha podido enviar el correo.");
+        }
+
+        document.getElementById("resumen").innerHTML =
+          "<b>Fecha:</b> " + escapar(fechaBonita) + "<br>" +
+          "<b>Hora:</b> " + escapar(hora) + "<br>" +
+          "<b>Cena:</b> " + escapar(comida) + "<br>" +
+          "<b>Comentario:</b> " + escapar(comentario || "Ninguno");
+        mostrar(4);
+      } catch (error) {
+        document.getElementById("error3").textContent =
+          "No se ha podido enviar. Comprueba tu conexión e inténtalo otra vez.";
+        boton.disabled = false;
+        boton.textContent = "Reintentar envío";
+      }
+    };
+
+    function escapar(texto) {
+      return texto.replace(/[&<>"']/g, c => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+      })[c]);
+    }
+  </script>
+</body>
+</html>
