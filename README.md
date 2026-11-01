@@ -1,20 +1,10 @@
-# Invitación a cenar
+# Cenilla — invitación a cenar
 
-Web sencilla en un único archivo `index.html`.
+1. Sube `index.html` a la raíz de tu repositorio `cenilla` y acepta reemplazar el archivo anterior.
+2. Haz Commit changes.
+3. Espera a que GitHub Pages actualice la web.
+4. Prueba el formulario y revisa `davidmaji04@gmail.com` (también Spam/Promociones).
 
-## Publicarla con GitHub Pages
+El formulario usa Web3Forms con la Access Key que has facilitado. La clave de acceso de formulario está pensada para usarse en el navegador; aun así, cualquiera que vea el código público podría intentar enviar mensajes usando esa clave. Si aparecen envíos no deseados, regenera/revoca la clave desde el panel del servicio.
 
-1. Descomprime este ZIP.
-2. Sube `index.html` a la raíz de tu repositorio de GitHub.
-3. Ve a **Settings → Pages**.
-4. En **Build and deployment**, elige **Deploy from a branch**.
-5. Selecciona `main` y la carpeta `/ (root)`, y pulsa **Save**.
-6. Espera a que GitHub Pages publique la URL.
-
-## Recibir las respuestas por correo
-
-El formulario está conectado a FormSubmit y configurado para enviar las respuestas a `davidmaji04@gmail.com`.
-
-**IMPORTANTE:** antes de usar la invitación, haz una prueba tú mismo. FormSubmit normalmente envía un correo de activación la primera vez que se usa una dirección. Abre ese correo y confirma la activación. Después, las respuestas podrán llegar a tu bandeja de entrada. Mira también Spam si no aparece.
-
-Esta web no necesita guardar contraseñas ni claves privadas. La dirección de correo queda visible en el código público, así que tenlo en cuenta. El envío depende del servicio externo FormSubmit.
+Si el servicio responde con error de dominio, revisa la configuración de dominios permitidos en el panel de Web3Forms y añade `davo2rr.github.io` si tu plan lo permite.
